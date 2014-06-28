@@ -13,23 +13,29 @@ public class JobSchedulerTest {
 
 	JobScheduler job;
 	
-//	static class JobOne implements Run {
-//		@Override
-//		public void execute(JobExecutionContext arg0)
-//				throws JobExecutionException {
-//		}
-//	}
+	public static class JobOne implements Job {
+		public boolean executed;
+		@Override
+		public void execute(JobExecutionContext arg0)
+				throws JobExecutionException {
+			this.executed = true;
+		}
+	}
 	
 	@Before
 	public void setUp() throws Exception {
 		job = new JobScheduler();
 	}
 
-//	@Test
-//	public void shouldAddAJobItem() {
-//		JobScheduler jobScheduler = job.add(JobOne.class);
-//		assertThat(job.count(), equalTo(1));
-//		assertThat(jobScheduler, equalTo(jobScheduler));
-//	}
-
+	public void shouldAddAJobItem() {
+		JobScheduler jobScheduler = job.add(JobOne.class);
+		assertThat(job.count(), equalTo(1));
+		assertThat(jobScheduler, equalTo(jobScheduler));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldDispatchErrorIfJobIsNull() {
+		job.add(null);
+	}
+	
 }
